@@ -49,9 +49,8 @@ namespace ExampleBot
         {
             while (!token.IsCancellationRequested)
             {
-                while (!queue.Events.IsCompleted)
+                while (queue.Events.TryDequeue(out var ev))
                 {
-                    var ev = queue.Events.Take(token);
                     Console.WriteLine($"event {ev.Name.ToLower()}");
 
                     if (ev.Name == nameof(DiscordSocketClient.MessageReceived))
@@ -62,8 +61,7 @@ namespace ExampleBot
                         await MessageReceivedAsync(msg);
                     }
                 }
-                // This should be unreachable.
-                return;
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
             }
         }
 
