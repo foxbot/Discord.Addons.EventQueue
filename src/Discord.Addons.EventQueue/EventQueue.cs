@@ -12,13 +12,13 @@ namespace Discord.Addons.EventQueue
     /// EventQueue provides a queue of Discord events to be handled sequentially on your own time
     /// </summary>
     /// <typeparam name="T">The type of <see cref="BaseSocketClient"/>you will be listening to events from</typeparam>
-    public class EventQueue<T>
+    public class EventQueue<T> : IDisposable
         where T : BaseSocketClient
     {
         /// <summary>
         /// Events contains a queue of <see cref="Event"/> structures, each wrapping a Discord event
         /// </summary>
-        public ConcurrentQueue<Event> Events { get; }
+        public BlockingCollection<Event> Events { get; }
 
         private readonly T _client;
         private readonly EventInfo[] _events;
@@ -34,7 +34,7 @@ namespace Discord.Addons.EventQueue
             _events = typeof(T).GetEvents();
             _eventMap = new Dictionary<string, Delegate>();
 
-            Events = new ConcurrentQueue<Event>();
+            Events = new BlockingCollection<Event>();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Discord.Addons.EventQueue
                 case 1:
                     handler = (Func<Task>)(() => {
                         var e = new Event(eventName, new Unit());
-                        Events.Enqueue(e);
+                        Events.Add(e);
 
                         return Task.CompletedTask;
                     });
@@ -79,7 +79,7 @@ namespace Discord.Addons.EventQueue
                 case 2:
                     handler = (Func<object, Task>)((o1) => {
                         var e = new Event(eventName, o1);
-                        Events.Enqueue(e);
+                        Events.Add(e);
 
                         return Task.CompletedTask;
                     });
@@ -87,7 +87,7 @@ namespace Discord.Addons.EventQueue
                 case 3:
                     handler = (Func<object, object, Task>)((o1, o2) => {
                         var e = new Event(eventName, (o1, o2));
-                        Events.Enqueue(e);
+                        Events.Add(e);
 
                         return Task.CompletedTask;
                     });
@@ -95,7 +95,7 @@ namespace Discord.Addons.EventQueue
                 case 4:
                     handler = (Func<object, object, object, Task>)((o1, o2, o3) => {
                         var e = new Event(eventName, (o1, o2, o3));
-                        Events.Enqueue(e);
+                        Events.Add(e);
 
                         return Task.CompletedTask;
                     });
@@ -127,6 +127,17 @@ namespace Discord.Addons.EventQueue
             ev.RemoveEventHandler(_client, handler);
 
             _eventMap.Remove(eventName);
+        }
+
+        /// <summary>
+        /// Dispose unregisters all event handlers and marks the queue as completed.
+        /// </summary>
+        /// <seealso cref="BlockingCollection{T}.IsCompleted"/>
+        void IDisposable.Dispose()
+        {
+            foreach (var eventName in _eventMap.Keys)
+                Unregister(eventName);
+            Events.CompleteAdding();
         }
     }
 }
