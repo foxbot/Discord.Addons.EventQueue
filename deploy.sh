@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=$(cat version)
+VERSION=$(cat ./VERSION)
 
 if [ -z $TRAVIS_TAG ]
 then
@@ -8,6 +8,8 @@ then
 	VERSION=$VERSION-$build
 fi
 
-dotnet pack "src/Discord.Addons.EventQueue.csproj" -c "Release" -o "./artifacts/" /p:Version=$VERSION
+mkdir "./artifacts"
 
-dotnet nuget push "artifacts/*" -s $MYGET_SOURCE -k $MYGET_KEY
+dotnet pack "./src/Discord.Addons.EventQueue.csproj" -c "Release" -o "./artifacts/" /p:Version=$VERSION
+
+dotnet nuget push "./artifacts/*" -s $MYGET_SOURCE -k $MYGET_KEY
