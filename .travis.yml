@@ -9,9 +9,7 @@ script:
   - dotnet build -c "Release"
 deploy:
   provider: script
-  script:
-    - chmod +x deploy.sh
-    - ./deploy.sh
+  script: "chmod +x ./deploy.sh && ./deploy.sh"
   on:
     branch: master
   skip_cleanup: true

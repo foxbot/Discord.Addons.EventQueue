@@ -1,3 +1,5 @@
+#!/bin/bash
+
 VERSION=$(cat version)
 
 if [ -z $TRAVIS_TAG ]
