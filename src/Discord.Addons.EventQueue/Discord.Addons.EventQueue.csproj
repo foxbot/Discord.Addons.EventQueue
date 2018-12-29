@@ -4,7 +4,7 @@
     <PackageId>Discord.Addons.EventQueue</PackageId>
     <Authors>foxbot</Authors>
     <PackageTags>discord;discordapp;discord.net</PackageTags>
-    <PackageProjectUrl>https://github.com/foxbot/Discord.Addons.Interactive</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/foxbot/Discord.Addons.EventQueue</PackageProjectUrl>
     <PackageLicenseUrl>https://opensource.org/licenses/isc</PackageLicenseUrl>
     <PackageIconUrl>https://github.com/foxbot/Discord.Addons.EventQueue/raw/master/marketing/PackageLogo.png</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
