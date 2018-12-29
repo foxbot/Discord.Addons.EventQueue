@@ -8,8 +8,13 @@ install:
 script:
   - dotnet build -c "Release"
 deploy:
-  provider: script
-  script: "chmod +x ./deploy.sh && ./deploy.sh"
-  on:
-    branch: master
-  skip_cleanup: true
+  - provider: script
+    script: "chmod +x ./deploy.sh && ./deploy.sh"
+    on:
+      branch: master
+    skip_cleanup: true
+  - provider: script
+    script: "chmod +x ./deploy.sh && ./deploy.sh"
+    on:
+      tags: true
+    skip_cleanup: true
