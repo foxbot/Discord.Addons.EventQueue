@@ -3,6 +3,7 @@
   <PropertyGroup>
     <PackageId>Discord.Addons.EventQueue</PackageId>
     <Authors>foxbot</Authors>
+    <PackageDescription>A FIFO event-queue for Discord.Net</PackageDescription>
     <PackageTags>discord;discordapp;discord.net</PackageTags>
     <PackageProjectUrl>https://github.com/foxbot/Discord.Addons.EventQueue</PackageProjectUrl>
     <PackageLicenseUrl>https://opensource.org/licenses/isc</PackageLicenseUrl>
@@ -17,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.0.0" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.2.0" />
   </ItemGroup>
 
 </Project>
